@@ -1,10 +1,9 @@
-// Learn more https://docs.expo.io/guides/customizing-metro
 const { getDefaultConfig } = require('expo/metro-config');
+const path = require('path');
 
-/** @type {import('expo/metro-config').MetroConfig} */
-const config = getDefaultConfig(__dirname, {
-  // [Web-only]: Enables CSS support in Metro.
-  isCSSEnabled: true,
-});
+const config = getDefaultConfig(__dirname);
+
+// Add extra file extensions for asset bundling
+config.resolver.assetExts.push('sqlite');
 
 module.exports = config;
