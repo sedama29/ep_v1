@@ -59,7 +59,7 @@ export default function TermsAndConditions({ navigation }) {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        padding: 10,       
+        padding: 10,
     },
     text1: {
         fontSize: 14,
@@ -73,9 +73,9 @@ const styles = StyleSheet.create({
         marginBottom: 5,
     },
     buttonContainer: {
-        flexDirection: 'row',    
-        justifyContent: 'center', 
-        width: '100%',            
+        flexDirection: 'row',
+        justifyContent: 'center',
+        width: '100%',
     },
     button: {
         backgroundColor: 'blue',
@@ -83,8 +83,8 @@ const styles = StyleSheet.create({
         borderRadius: 4,
         alignItems: 'center',
         marginVertical: 20,
-        width:100,
-        height:40
+        width: 100,
+        height: 40
     },
     buttonText: {
         color: 'white',
