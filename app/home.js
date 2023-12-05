@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { ScrollView, View, Text, Image, StyleSheet } from 'react-native';
+import { ScrollView, View, Text, Image, StyleSheet, Linking } from 'react-native';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import { Picker } from '@react-native-picker/picker';
 import { styles } from './style/style_home';
+import axios from 'axios';
+import Papa from 'papaparse';
 
 import About from './legend/About';
 import Harte from './legend/Harte';
@@ -10,11 +12,68 @@ import Tglo from './legend/Tglo';
 
 const Drawer = createDrawerNavigator();
 
+const Data90DaysView = ({ siteId }) => {
+  const [data, setData] = useState([]);
+  const handleLinkPress = () => {
+    Linking.openURL('https://enterococcus.today/home.php');
+  };
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get(`https://enterococcus.today/waf/nowcast/TX/data_90_days/${siteId}.csv`);
+        Papa.parse(response.data, {
+          header: true,
+          complete: (results) => {
+            setData(results.data);
+          }
+        });
+      } catch (error) {
+        console.error('Error fetching CSV data:', error);
+      }
+    };
+
+    if (siteId) {
+      fetchData();
+    }
+  }, [siteId]);
+
+  return (
+    <View>
+      <Text style={{ fontWeight: 'bold' }}>Last 90 days </Text>
+      <Text style={styles.descriptionText}>
+        For more detailed information and to download the data, visit {' '}
+        <Text style={styles.linkText} onPress={handleLinkPress}>
+          https://enterococcus.today/home.php.
+        </Text>
+      </Text>
+      <View style={styles.tableHeader}>
+        <Text style={[styles.headerText, styles.column]}>Date</Text>
+        <Text style={[styles.headerText, styles.column]}>Time</Text>
+        <Text style={[styles.headerText, styles.column]}>Count</Text>
+        <Text style={[styles.headerText, styles.column]}>Level</Text>
+      </View>
+      <ScrollView>
+        {data.map((row, index) => (
+          <View key={index} style={styles.dataRow}>
+            <Text style={styles.column}>{row.Date}</Text>
+            <Text style={styles.column}>{row.Time}</Text>
+            <Text style={styles.column}>{row.Count}</Text>
+            <Text style={styles.column}>{row.Level}</Text>
+          </View>
+        ))}
+      </ScrollView>
+    </View>
+  );
+};
+
 const Home = () => {
   const [siteOptions, setSiteOptions] = useState([]);
   const [selectedSite, setSelectedSite] = useState();
   const [imageUrl, setImageUrl] = useState();
   const [coordsDict, setCoordsDict] = useState({});
+  const [contactDetails, setContactDetails] = useState({});
+
 
   useEffect(() => {
     async function fetchSiteOptions() {
@@ -42,9 +101,121 @@ const Home = () => {
       }
     }
 
+    const fetchContactDetails = async () => {
+      try {
+        const response = await fetch('https://enterococcus.today/waf/nowcast/TX/contact_details.json');
+        const data = await response.json();
+        setContactDetails(data);
+      } catch (error) {
+        console.error('Error fetching contact details:', error);
+      }
+    };
+
+    fetchContactDetails();
+
     fetchSiteOptions();
     fetchCoords();
   }, []);
+
+  const renderContactDetails = () => {
+    const details = contactDetails[selectedSite];
+    if (!details) return <Text>No contact details available.</Text>;
+
+    return (
+      <ScrollView>
+        <View style={styles.contactContainer}>
+          <Text style={styles.sectionHeader}>Entity:</Text>
+          <View style={styles.row_contact}>
+            <Text style={styles.column_contact}>Name:</Text>
+            <Text style={styles.value_contact}>{details.l_entity_name}</Text>
+          </View>
+          <View style={styles.row_contact}>
+            <Text style={styles.column_contact}>Address:</Text>
+            <Text style={styles.value_contact}>{details.l_entity_address}</Text>
+          </View>
+          <View style={styles.row_contact}>
+            <Text style={styles.column_contact}>Phone:</Text>
+            <Text style={styles.value_contact}>{details.l_entity_phone}</Text>
+          </View>
+          <View style={styles.row_contact}>
+            <Text style={styles.column_contact}>URL:</Text>
+            <Text style={styles.value_contact}><Text style={styles.linkText} onPress={() => Linking.openURL(details.l_entity_url)}>{details.l_entity_url}</Text></Text>
+          </View>
+
+          <Text style={styles.sectionHeader}>Government Contact:</Text>
+          <View style={styles.row_contact}>
+            <Text style={styles.column_contact}>Name:</Text>
+            <Text style={styles.value_contact}>{details.l_gov_contact1_name}</Text>
+          </View>
+          <View style={styles.row_contact}>
+            <Text style={styles.column_contact}>Email:</Text>
+            <Text style={styles.value_contact}><Text style={styles.linkText} onPress={() => Linking.openURL(`mailto:${details.l_gov_contact1_email}`)}>{details.l_gov_contact1_email}</Text></Text>
+          </View>
+          <View style={styles.row_contact}>
+            <Text style={styles.column_contact}>Address:</Text>
+            <Text style={styles.value_contact}>{details.l_gov_contact1_address}</Text>
+          </View>
+          <View style={styles.row_contact}>
+            <Text style={styles.column_contact}>Phone:</Text>
+            <Text style={styles.value_contact}>{details.l_gov_contact1_phone}</Text>
+          </View>
+
+          <Text style={styles.sectionHeader}>Laboratory:</Text>
+          <View style={styles.row_contact}>
+            <Text style={styles.column_contact}>Office:</Text>
+            <Text style={styles.value_contact}>{details.lab_office}</Text>
+          </View>
+          <View style={styles.row_contact}>
+            <Text style={styles.column_contact}>Email:</Text>
+            <Text style={styles.value_contact}>{details.lab_email ? <Text style={styles.linkText} onPress={() => Linking.openURL(`mailto:${details.lab_email}`)}>{details.lab_email}</Text> : 'N/A'}</Text>
+          </View>
+          <View style={styles.row_contact}>
+            <Text style={styles.column_contact}>Address:</Text>
+            <Text style={styles.value_contact}>{details.lab_address}</Text>
+          </View>
+          <View style={styles.row_contact}>
+            <Text style={styles.column_contact}>Phone:</Text>
+            <Text style={styles.value_contact}>{details.lab_phone}</Text>
+          </View>
+          <View style={styles.row_contact}>
+            <Text style={styles.column_contact}>URL:</Text>
+            <Text style={styles.value_contact}><Text style={styles.linkText} onPress={() => Linking.openURL(details.lab_url)}>{details.lab_url}</Text></Text>
+          </View>
+  
+          <Text style={styles.sectionHeader}>Project Manager:</Text>
+          <View style={styles.row_contact}>
+            <Text style={styles.column_contact}>Name:</Text>
+            <Text style={styles.value_contact}>{details.pm_name}</Text>
+          </View>
+          <View style={styles.row_contact}>
+            <Text style={styles.column_contact}>Position:</Text>
+            <Text style={styles.value_contact}>{details.pm_position}</Text>
+          </View>
+          <View style={styles.row_contact}>
+            <Text style={styles.column_contact}>Division:</Text>
+            <Text style={styles.value_contact}>{details.pm_division ? details.pm_division : 'N/A'}</Text>
+          </View>
+          <View style={styles.row_contact}>
+            <Text style={styles.column_contact}>Office:</Text>
+            <Text style={styles.value_contact}>{details.pm_office}</Text>
+          </View>
+          <View style={styles.row_contact}>
+            <Text style={styles.column_contact}>Address:</Text>
+            <Text style={styles.value_contact}>{details.pm_address ? details.pm_address : 'N/A'}</Text>
+          </View>
+          <View style={styles.row_contact}>
+            <Text style={styles.column_contact}>Phone:</Text>
+            <Text style={styles.value_contact}>{details.pm_phone}</Text>
+          </View>
+          <View style={styles.row_contact}>
+            <Text style={styles.column_contact}>Email:</Text>
+            <Text style={styles.value_contact}><Text style={styles.linkText} onPress={() => Linking.openURL(`mailto:${details.pm_email}`)}>{details.pm_email}</Text></Text>
+          </View>
+        </View>
+      </ScrollView>
+    );
+  };
+
 
   useEffect(() => {
     if (selectedSite) {
@@ -54,40 +225,58 @@ const Home = () => {
   }, [selectedSite]);
 
   return (
-    <ScrollView contentContainerStyle={styles.container}>
-      <View style={styles.pickerContainer}>
-        <Picker
-          mode="dropdown"
-          selectedValue={selectedSite}
-          onValueChange={(itemValue) => setSelectedSite(itemValue)}
-          style={styles.picker}
-          itemStyle={styles.pickerItem}>
-          {siteOptions.map((site, index) => (
-            <Picker.Item
-              style={{ fontSize: 10 }}
-              label={site}
-              value={site.match(/\(([^)]+)\)/)?.[1]} // Extracts value inside parentheses
-              key={index}/>
-          ))}
-        </Picker>
-
-      </View>
-      {selectedSite && coordsDict[selectedSite] && (
-        <View style={styles.tableContainer}>
-          <View style={styles.tableHeader}>
-            <Text style={styles.headerText}>Latitude</Text>
-            <Text style={styles.headerText}>Longitude</Text>
-          </View>
-          <View style={styles.tableRow}>
-            <Text style={styles.rowText}>{coordsDict[selectedSite].lat}</Text>
-            <Text style={styles.rowText}>{coordsDict[selectedSite].long}</Text>
-          </View>
+      <ScrollView contentContainerStyle={styles.container}>
+        <View style={styles.pickerContainer}>
+          <Picker
+            mode="dropdown"
+            selectedValue={selectedSite}
+            onValueChange={(itemValue) => setSelectedSite(itemValue)}
+            style={styles.picker}
+            itemStyle={styles.pickerItem}>
+            {siteOptions.map((site, index) => (
+              <Picker.Item
+                style={{ fontSize: 10 }}
+                label={site}
+                value={site.match(/\(([^)]+)\)/)?.[1]} // Extracts value inside parentheses
+                key={index} />
+            ))}
+          </Picker>
         </View>
-      )}
-      <View style={styles.container_location}>
-        {imageUrl && <Image source={{ uri: imageUrl }} style={styles.imageStyle} />}
-      </View>
-    </ScrollView>
+
+        <Text style = {{marginTop:30, fontSize: 14, fontWeight: 'bold'}}>Data</Text>
+        <View>
+          <ScrollView contentContainerStyle={styles.container_data}>
+            {selectedSite && (
+              <Data90DaysView siteId={selectedSite} />
+            )}
+          </ScrollView>
+        </View>
+
+        {selectedSite && coordsDict[selectedSite] && (
+          <View style={{marginTop: 30,}}>
+            <Text>
+              <Text style={{ fontWeight: 'bold' }}>Latitude: </Text>
+              <Text>{coordsDict[selectedSite].lat}</Text>
+            </Text>
+            <Text>
+              <Text style={{ fontWeight: 'bold' }}>Longitude: </Text>
+              <Text>{coordsDict[selectedSite].long}</Text>
+            </Text>
+          </View>
+        )}
+
+        <View style={styles.container_location}>
+          {imageUrl && <Image source={{ uri: imageUrl }} style={styles.imageStyle} />}
+        </View>
+
+        <Text style = {{marginTop:30, fontSize: 14, fontWeight: 'bold'}}>Contact</Text>
+        <View>
+          <ScrollView contentContainerStyle={styles.container_contact}>
+            {renderContactDetails()}
+          </ScrollView>
+        </View>
+
+      </ScrollView>
   );
 };
 
