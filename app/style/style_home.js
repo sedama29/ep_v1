@@ -86,7 +86,7 @@ export const styles = StyleSheet.create({
     borderBottomWidth: 1,
     borderColor: '#ddd',
     justifyContent: 'space-between',
-    backgroundColor: '#f2f2f2',
+    // backgroundColor: '#f2f2f2',
     padding: 10,
   },
   headerText: {

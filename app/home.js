@@ -7,7 +7,6 @@ import Data90DaysView from './Data90DaysView';
 import ContactDetailsView from './ContactDetailsView';
 import GraphView from './GraphView';
 
-
 import About from './legend/About';
 import Harte from './legend/Harte';
 import Tglo from './legend/Tglo';
