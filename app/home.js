@@ -3,10 +3,10 @@ import { ScrollView, View, Text, Image, Linking } from 'react-native';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import { Picker } from '@react-native-picker/picker';
 import { styles } from './style/style_home';
-import Data90DaysView from './Data90DaysView';
-import ContactDetailsView from './ContactDetailsView';
+import Data90DaysView from './data/Data90DaysView';
+import ContactDetailsView from './data/ContactDetailsView';
 import GraphView from './GraphView';
-
+ 
 import About from './legend/About';
 import Harte from './legend/Harte';
 import Tglo from './legend/Tglo';
@@ -19,7 +19,6 @@ const Home = () => {
   const [imageUrl, setImageUrl] = useState();
   const [coordsDict, setCoordsDict] = useState({});
   const [contactDetails, setContactDetails] = useState({});
-
 
   useEffect(() => {
     async function fetchSiteOptions() {
@@ -56,9 +55,7 @@ const Home = () => {
         console.error('Error fetching contact details:', error);
       }
     };
-
     fetchContactDetails();
-
     fetchSiteOptions();
     fetchCoords();
   }, []);
@@ -89,6 +86,7 @@ const Home = () => {
         </Picker>
       </View>
 
+      <Text style={{ marginTop: 30, fontSize: 14, fontWeight: 'bold' }}>Enterococcus Counts</Text>
       {selectedSite && <GraphView siteId={selectedSite} />}
 
 
@@ -99,21 +97,24 @@ const Home = () => {
         </ScrollView>
       </View>
 
+      <Text style={{ marginTop: 30, fontSize: 14, fontWeight: 'bold' }}>Location</Text>
+      <View style={styles.container_location}>
       {selectedSite && coordsDict[selectedSite] && (
-        <View style={{ marginTop: 30, }}>
-          <Text>
-            <Text style={{ fontWeight: 'bold' }}>Latitude: </Text>
+        <View >
+          <Text style={{ fontSize: 12}}>
+            <Text style={{ fontWeight: 'bold'}}>Latitude: </Text>
             <Text>{coordsDict[selectedSite].lat}</Text>
           </Text>
-          <Text>
+          <Text style={{ fontSize: 12, paddingBottom: 10}}>
             <Text style={{ fontWeight: 'bold' }}>Longitude: </Text>
             <Text>{coordsDict[selectedSite].long}</Text>
           </Text>
         </View>
       )}
 
-      <View style={styles.container_location}>
+      <View style={styles.container_image}>
         {imageUrl && <Image source={{ uri: imageUrl }} style={styles.imageStyle} />}
+      </View>
       </View>
 
       <Text style={{ marginTop: 30, fontSize: 14, fontWeight: 'bold' }}>Contact</Text>

@@ -1,38 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { ScrollView, StyleSheet } from 'react-native';
 import { VictoryChart, VictoryTheme, VictoryAxis, VictoryLine, VictoryArea, VictoryContainer } from 'victory-native';
-import Svg, { Rect } from 'react-native-svg';
 import axios from 'axios';
 import * as d3 from 'd3';
 import { styles } from './style/style_graph_view';
+import CustomBackground from './Graph/CustomBackground';
+
 
 const chartPadding = { top: 10, bottom: 50, left: 50, right: 50 };
-
-const CustomBackground = ({ children, ...props }) => {
-  const yScale = props.scale.y;
-
-  const plotAreaTop = yScale(150);
-  const plotAreaBottom = yScale(0);
-
-  const yYellow = yScale(104);
-  const yGreen = yScale(35);
-  const yRed = plotAreaTop;
-
-  const heightLightYellow = yGreen - yYellow;
-  const heightLightGreen = plotAreaBottom - yGreen;
-  const heightLightCoral = yYellow - yRed;
-
-  return (
-    <VictoryContainer {...props}>
-      <Svg style={{ position: 'absolute', top: 0, left: 0 }}>
-        <Rect x={chartPadding.left} y={yYellow} width={props.width - chartPadding.left - chartPadding.right} height={heightLightYellow} fill="#FFFFE5" />
-        <Rect x={chartPadding.left} y={yGreen} width={props.width - chartPadding.left - chartPadding.right} height={heightLightGreen} fill="#E5FFE5" />
-        <Rect x={chartPadding.left} y={yRed} width={props.width - chartPadding.left - chartPadding.right} height={heightLightCoral} fill="#FFE5E5" />
-      </Svg>
-      {children}
-    </VictoryContainer>
-  );
-};
 
 const GraphView = ({ siteId }) => {
   const [data, setData] = useState({});
@@ -127,8 +102,8 @@ const GraphView = ({ siteId }) => {
               y="value"
               style={{
                 data: {
-                  stroke: d3.schemeCategory10[index % 10],
-                  strokeDasharray: key === 'Probality_Space' ? '4, 4' : '0', // Apply dotted style for 'ecount'
+                  stroke: key === 'Probality_Space_high' || key === 'Probality_Space_low' ? 'transparent' : d3.schemeCategory10[index % 10],
+                  strokeDasharray: key === 'Probality_Space' ? '4, 4' : '0', // Dotted style for 'Probality_Space'
                 }
             }}
             />

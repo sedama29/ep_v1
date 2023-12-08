@@ -9,7 +9,7 @@ export const styles = StyleSheet.create({
     borderRadius: 5,
   },
   pickerContainer: {
-    backgroundColor: 'lightgray', // Ash background color
+    backgroundColor: 'lightgray',
     width: 250,
     borderRadius: 5,
     overflow: 'hidden',
@@ -48,13 +48,28 @@ export const styles = StyleSheet.create({
 
   },
   container_location: {
-    // alignItems: 'center',
-    width: '100%',
-    height: 250,
+    borderWidth:1,
+    padding: 5,
+    height: 320,
     resizeMode: 'contain',
     borderRadius: 5,
     overflow: 'hidden',
   },
+  container_image: {
+    alignItems: 'center',
+    width: '100%', 
+    height: 'auto', 
+    borderRadius: 5,
+    overflow: 'hidden',
+  },
+  
+  imageStyle: {
+    borderWidth: 1,
+    width: '100%',
+    aspectRatio: 1.5, 
+    resizeMode: 'contain',
+  },
+
   container_contact: {
     alignItems: 'left',
     width: '100%',
@@ -77,7 +92,7 @@ export const styles = StyleSheet.create({
   dataRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    padding: 10,
+    padding: 5,
     borderBottomWidth: 1,
     borderColor: '#ddd'
   },
@@ -87,32 +102,23 @@ export const styles = StyleSheet.create({
     borderColor: '#ddd',
     justifyContent: 'space-between',
     // backgroundColor: '#f2f2f2',
-    padding: 10,
+    padding: 5,
   },
   headerText: {
     fontWeight: 'bold',
     fontSize: 11,
-
   },
   column: {
-    width: '30%',
-    textAlign: 'left',
+    width: '25%',
+    textAlign: 'center',
     fontSize: 11,
   },
-  imageStyle: {
-    width: '100%',
-    height: '100%',
-    resizeMode: 'contain',
-  },
+
   headerText: {
     fontWeight: 'bold',
     padding: 5,
   },
   rowText: {
     padding: 5,
-  },
-
-
-  contactContainer: {
   },
 });

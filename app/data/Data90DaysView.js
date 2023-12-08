@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, ScrollView } from 'react-native';
 import axios from 'axios';
 import Papa from 'papaparse';
-import { styles } from './style/style_home'; // Adjust the path as needed
+import { styles } from '../style/style_home'; // Adjust the path as needed
 
 const Data90DaysView = ({ siteId }) => {
     const [data, setData] = useState([]);
