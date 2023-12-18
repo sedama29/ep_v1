@@ -21,48 +21,51 @@ export const styles = StyleSheet.create({
     legendContainer: {
       position: 'absolute',
       top: 40,
-      right: 70,
+      right: 50,
       backgroundColor: 'white',
-      padding: 10,
+      width: 120, // Adjust as needed
+      height: 210, // Adjust as needed
+      padding: 10, 
       borderRadius: 5,
-      // other styles...
     },
+
     legendItem: {
       flexDirection: 'row',
       alignItems: 'center',
-      fontSize:4,
-      // other styles...
+      fontSize: 10, // Reduced font size
+      marginVertical: 2, // Adjusted margin
     },
     legendToggleButton: {
       position: 'absolute',
       top: 10,
       right: 10,
       backgroundColor: 'lightgray', // Temporary background for debugging
-      padding: 10, // Ensure it's easily clickable
-      zIndex: 1, // Make sure it's above other components
+      padding: 10, 
+      zIndex: 1, 
     },
 
     checkboxContainer: {
       flexDirection: 'row',
       alignItems: 'center',
-      marginVertical: 4,
+      justifyContent: 'flex-start', 
+      marginVertical: 1
     },
     checkboxBase: {
-      width: 24,
-      height: 24,
+      width: 10,  // Size adjustments as before
+      height: 10,
       justifyContent: 'center',
       alignItems: 'center',
-      borderWidth: 2,
+      borderWidth: 1,
       borderColor: 'black',
-      borderRadius: 4,
-      marginRight: 8,
+      borderRadius: 3,
+      marginRight: 5,
     },
     checkboxChecked: {
       backgroundColor: 'blue',
-      padding: 10, // Add some padding to increase the touchable area
     },
     checkboxCheckmark: {
       color: 'white',
+      fontSize: 8, // Reduced font size
     },
     
   });

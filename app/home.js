@@ -6,9 +6,9 @@ import { styles } from './style/style_home';
 import Data90DaysView from './data/Data90DaysView';
 import ContactDetailsView from './data/ContactDetailsView';
 import GraphView from './GraphView';
- 
+
 import About from './legend/About';
-import Harte from './legend/Harte';
+// import Harte from './legend/Harte';
 import Tglo from './legend/Tglo';
 
 const Drawer = createDrawerNavigator();
@@ -99,22 +99,22 @@ const Home = () => {
 
       <Text style={{ marginTop: 30, fontSize: 14, fontWeight: 'bold' }}>Location</Text>
       <View style={styles.container_location}>
-      {selectedSite && coordsDict[selectedSite] && (
-        <View >
-          <Text style={{ fontSize: 12}}>
-            <Text style={{ fontWeight: 'bold'}}>Latitude: </Text>
-            <Text>{coordsDict[selectedSite].lat}</Text>
-          </Text>
-          <Text style={{ fontSize: 12, paddingBottom: 10}}>
-            <Text style={{ fontWeight: 'bold' }}>Longitude: </Text>
-            <Text>{coordsDict[selectedSite].long}</Text>
-          </Text>
-        </View>
-      )}
+        {selectedSite && coordsDict[selectedSite] && (
+          <View style={{ flexDirection: 'row', alignItems: 'center', paddingBottom: 10 }}>
+            <Text style={{ fontSize: 12 }}>
+              <Text style={{ fontWeight: 'bold' }}>Latitude: </Text>
+              <Text>{coordsDict[selectedSite].lat}</Text>
+            </Text>
+            <Text style={{ fontSize: 12, paddingLeft: 50 }}>
+              <Text style={{ fontWeight: 'bold' }}>Longitude: </Text>
+              <Text>{coordsDict[selectedSite].long}</Text>
+            </Text>
+          </View>
+        )}
 
-      <View style={styles.container_image}>
-        {imageUrl && <Image source={{ uri: imageUrl }} style={styles.imageStyle} />}
-      </View>
+        <View style={styles.container_image}>
+          {imageUrl && <Image source={{ uri: imageUrl }} style={styles.imageStyle} />}
+        </View>
       </View>
 
       <Text style={{ marginTop: 30, fontSize: 14, fontWeight: 'bold' }}>Contact</Text>
@@ -132,9 +132,9 @@ function MyDrawer() {
   return (
     <Drawer.Navigator screenOptions={{ headerStyle: { height: 50 } }}>
       <Drawer.Screen name="Home" component={Home} />
-      <Drawer.Screen name="About" component={About} />
+      <Drawer.Screen name="About..." component={About} />
       <Drawer.Screen name="Texas General Land Office" component={Tglo} />
-      <Drawer.Screen name="Harte Research Institute" component={Harte} />
+      {/* <Drawer.Screen name="Harte Research Institute" component={Harte} /> */}
     </Drawer.Navigator>
   );
 }

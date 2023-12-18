@@ -50,7 +50,7 @@ export const styles = StyleSheet.create({
   container_location: {
     borderWidth:1,
     padding: 5,
-    height: 320,
+    height: 300,
     resizeMode: 'contain',
     borderRadius: 5,
     overflow: 'hidden',
@@ -75,7 +75,7 @@ export const styles = StyleSheet.create({
     width: '100%',
     borderWidth: 1,
     padding: 5,
-    // height: 200,
+    height: 200,
     borderRadius: 5,
   },
   sectionHeader: {

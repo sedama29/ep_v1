@@ -30,6 +30,20 @@ const Data90DaysView = ({ siteId }) => {
         }
     }, [siteId]);
 
+
+    const getColorForLevel = (level) => {
+        switch (level) {
+            case 'Low':
+                return 'green';
+            case 'Medium':
+                return 'orange';
+            case 'High':
+                return 'red';
+            default:
+                return 'black'; // Default color
+        }
+    };
+
     return (
         <View>
             <Text style={{ fontWeight: 'bold', fontSize: 11 }}>Last 90 days </Text>
@@ -51,7 +65,9 @@ const Data90DaysView = ({ siteId }) => {
                         <Text style={styles.column}>{row.Date}</Text>
                         <Text style={styles.column}>{row.Time}</Text>
                         <Text style={styles.column}>{row.Count}</Text>
-                        <Text style={styles.column}>{row.Level}</Text>
+                        <Text style={[styles.column, { color: getColorForLevel(row.Level) }]}>
+                            {row.Level}
+                        </Text>                    
                     </View>
                 ))}
             </ScrollView>
