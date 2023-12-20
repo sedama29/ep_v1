@@ -54,6 +54,15 @@ const GraphView = ({ siteId }) => {
   const [showLegend, setShowLegend] = useState(false);
   const screenWidth = 400;
   const screenHeight = 300;
+  const today = new Date();
+  const fiveHoursInMs = 7 * 60 * 60 * 1000; // milliseconds in 5 hours
+  const earlierToday = new Date(today - fiveHoursInMs);
+  const laterToday = new Date(today.getTime() + fiveHoursInMs);
+
+  const formatDate_2 = d3.timeFormat("%Y-%m-%d %H:%M:%S");
+  const earlierTodayFormatted = formatDate_2(earlierToday);
+  const laterTodayFormatted = formatDate_2(laterToday);
+
 
   useEffect(() => {
     const fetchData = async () => {
@@ -90,8 +99,10 @@ const GraphView = ({ siteId }) => {
   
           // Initialize visibility state
           const initialVisibility = {};
+          let count = 0; // Counter to track the number of keys processed
           Object.keys(transformedData).forEach(key => {
-            initialVisibility[key] = true;
+            initialVisibility[key] = count < 4; // Only first three keys are true
+            count++;
           });
           setVisiblePlots(initialVisibility);
   
@@ -121,16 +132,12 @@ const GraphView = ({ siteId }) => {
     tickValues = d3.timeWeek.every(1).range(d3.min(dates), d3.max(dates));
   }
 
-
   const togglePlot = (key) => {
     setVisiblePlots(prevState => ({
       ...prevState,
       [key]: !prevState[key], // Correctly toggle the state
     }));
   };
-  
-  
-
   
   return (
     <ScrollView horizontal style={styles.container} contentContainerStyle={styles.contentContainer}>
@@ -171,6 +178,18 @@ const GraphView = ({ siteId }) => {
             y0="y0"
             style={{ data: { fill: "lightblue", opacity: 0.5 } }}
           />
+          <VictoryLine
+            x={() => new Date(earlierTodayFormatted)}
+            style={{ data: { stroke: 'black', strokeWidth: 1} }}
+          />
+
+          {/* Vertical line for later today */}
+          <VictoryLine
+            x={() => new Date(laterTodayFormatted)}
+            style={{ data: { stroke: 'black', strokeWidth: 1 } }}
+          />
+
+
             
       {showLegend && (
         <CustomLegend dataKeys={Object.keys(data)} visiblePlots={visiblePlots} togglePlot={togglePlot} />

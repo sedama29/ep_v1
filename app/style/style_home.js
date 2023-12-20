@@ -10,7 +10,7 @@ export const styles = StyleSheet.create({
   },
   pickerContainer: {
     backgroundColor: 'lightgray',
-    width: 250,
+    width: 280,
     borderRadius: 5,
     overflow: 'hidden',
   },
@@ -22,7 +22,7 @@ export const styles = StyleSheet.create({
   descriptionText: {
     marginTop: 5,
     marginBottom: 10,
-    fontSize: 11,
+    fontSize: 13,
   },
   linkText: {
     color: 'blue',
@@ -120,5 +120,34 @@ export const styles = StyleSheet.create({
   },
   rowText: {
     padding: 5,
+  },
+
+  modalView: {
+    flex: 1,
+    marginTop: 20,
+    padding:10,
+    borderRadius: 5,
+
+  },
+  closeButton: {
+    alignItems: "center",
+    alignSelf: 'center', 
+    backgroundColor: "blue",
+    padding: 10,
+    width: '20%',
+    borderRadius: 5,
+  },
+  alertButton: {
+    position: 'absolute',
+    top: 10,
+    right: 10,
+    zIndex: 1,
+  },
+  alertText: {
+    color: 'red',
+    fontSize: 16,
+  },
+  boldText: {
+    fontWeight: 'bold',
   },
 });

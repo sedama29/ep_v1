@@ -43,5 +43,17 @@ export const styles = StyleSheet.create({
   hyperlink: {
     color: 'blue',
   },
+  pickerAndDotsContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between'
+  },
+  
+  dotsButton: {
+    width: 30,   // Specify the width
+    height: 30,  // Specify the height
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
 });
 
