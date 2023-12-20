@@ -150,4 +150,30 @@ export const styles = StyleSheet.create({
   boldText: {
     fontWeight: 'bold',
   },
+  pickerAndDotsContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  dotsButton: {
+    fontSize:12,
+    padding: 5,
+  },
+  modalView: {
+    // Style for modal view
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+  },
+  imageStyle_2: {
+    // Style for the image
+    width: '90%',
+    height: '50%',
+    resizeMode: 'contain',
+  },
+  closeButton: {
+    backgroundColor: '#ddd',
+    padding: 10,
+    borderRadius: 5,
+  },
 });

@@ -28,6 +28,8 @@ const Home = () => {
   const [observedData, setObservedData] = useState([]);
   const [predictedData, setPredictedData] = useState([]);
   const [totalCount, setTotalCount] = useState(0);
+  const [isImageModalVisible, setImageModalVisible] = useState(false);
+
 
   const [index, setIndex] = useState(0);
   const [routes, setRoutes] = useState([
@@ -197,6 +199,7 @@ const Home = () => {
           </TouchableOpacity>
         </View>
       </Modal>
+      <View style={styles.pickerAndDotsContainer}>
       <View style={styles.pickerContainer}>
         <Picker
           mode="dropdown"
@@ -213,6 +216,11 @@ const Home = () => {
           ))}
         </Picker>
       </View>
+      <TouchableOpacity onPress={() => setImageModalVisible(true)} style={styles.dotsButton}>
+        <Text>⋮</Text>
+      </TouchableOpacity>
+      </View>
+
 
       <Text style={{ marginTop: 30, fontSize: 14, fontWeight: 'bold' }}>Enterococcus Counts</Text>
       {selectedSite && <GraphView siteId={selectedSite} />}
@@ -251,6 +259,20 @@ const Home = () => {
           {selectedSite && <ContactDetailsView details={contactDetails[selectedSite]} />}
         </ScrollView>
       </View>
+            
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={isImageModalVisible}
+        onRequestClose={() => setImageModalVisible(false)}
+      >
+        <View style={styles.modalView}>
+          <Image source={require('../assets/images/map_2.jpg')} style={styles.imageStyle_2} />
+          <TouchableOpacity onPress={() => setImageModalVisible(false)} style={styles.closeButton}>
+            <Text>Close</Text>
+          </TouchableOpacity>
+        </View>
+      </Modal>
 
     </ScrollView>
   );
