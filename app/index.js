@@ -5,8 +5,6 @@ import { Link } from 'expo-router';
 import BWImage from '../assets/images/BW_Logo.png'
 import google from '../assets/images/btn_google_signin_dark_normal_web.png'
 
-
-
 export default function LoginPage() {
   return (
     <View style={styles.container}>
@@ -18,7 +16,7 @@ export default function LoginPage() {
         bacteria for a geographical area, is currently in development. If you are a registered user, please use your Google account to log in. If you are having issues logging in, please contact info@enterococcus.today.
       </Text>
       <TouchableOpacity>
-        <Link href={'/home'}>
+        <Link href={'/drawer'}>
           <View>
             <Image
               source={google}

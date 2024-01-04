@@ -1,19 +1,18 @@
 import React, { useEffect, useState } from 'react';
 import { ScrollView, View, Text, Image, Dimensions, Modal, TouchableOpacity } from 'react-native';
-import { createDrawerNavigator } from '@react-navigation/drawer';
 import { Picker } from '@react-native-picker/picker';
 import { styles } from './style/style_home';
 import Data90DaysView from './data/Data90DaysView';
 import ContactDetailsView from './data/ContactDetailsView';
 import GraphView from './GraphView';
-import { TabView, SceneMap, TabBar } from 'react-native-tab-view';
+import { TabView, SceneMap} from 'react-native-tab-view';
+import MapImage1 from '../assets/images/sub_images/JEF_1_2.jpg';
+import MapImage2 from '../assets/images/sub_images/GAL_2_2.jpg';
+import MapImage3 from '../assets/images/sub_images/BRA_3_2.jpg';
+import MapImage4 from '../assets/images/sub_images/NUE_4_2.jpg';
+import MapImage5 from '../assets/images/sub_images/CAM_5_2.jpg';
 
 
-import About from './legend/About';
-// import Harte from './legend/Harte';
-import Tglo from './legend/Tglo';
-
-const Drawer = createDrawerNavigator();
 const initialLayout = { width: Dimensions.get('window').width };
 
 
@@ -29,6 +28,114 @@ const Home = () => {
   const [predictedData, setPredictedData] = useState([]);
   const [totalCount, setTotalCount] = useState(0);
   const [isImageModalVisible, setImageModalVisible] = useState(false);
+  const [isCamModalVisible, setCamModalVisible] = useState(false);
+
+
+  const [selectedImage, setSelectedImage] = useState(null);
+
+  const touchAreas = [
+    { x: [130, 150], y: [290, 310], image: MapImage5 },
+    { x: [125, 145], y: [185, 205], image: MapImage4 },
+    { x: [240, 260], y: [95, 115], image: MapImage3 },
+    { x: [265, 285], y: [70, 90], image: MapImage2 },
+    { x: [310, 330], y: [50, 70], image: MapImage1 },
+  ];
+
+  const handleMapPress = (evt) => {
+    const { locationX, locationY } = evt.nativeEvent;
+
+    for (const touchArea of touchAreas) {
+      if (
+        locationX >= touchArea.x[0] && locationX <= touchArea.x[1] &&
+        locationY >= touchArea.y[0] && locationY <= touchArea.y[1]
+      ) {
+        setSelectedImage(touchArea.image);
+        setImageModalVisible(false);
+        setCamModalVisible(true);
+        return;
+      }
+    }
+  };
+
+  // Specific touch areas for each image
+  const specificTouchAreas = {
+    MapImage1: [
+      { x: [135, 155], y: [165, 185], site: 'JEF012' },
+      { x: [180, 200], y: [145, 165], site: 'JEF009' },
+      { x: [205, 225], y: [140, 160], site: 'JEF013' },
+    ],
+    MapImage2: [
+      { x: [235, 255], y: [75, 95], site: 'GAL038' },
+      { x: [170, 190], y: [130, 150], site: 'GAL037' },
+      { x: [100, 120], y: [220, 240], site: 'GAL036' },    
+    ],
+    MapImage3: [
+      { x: [230, 250], y: [65, 85], site: 'BRA012' },
+      { x: [215, 235], y: [85, 105], site: 'BRA011' },
+      { x: [110, 130], y: [250, 270], site: 'BRA010' },    
+    ],
+    MapImage4: [
+      { x: [190, 210], y: [110, 130], site: 'NUE014' },
+      { x: [165, 185], y: [180, 200], site: 'NUE015' },
+      { x: [150, 170], y: [245, 255], site: 'NUE016' },    
+    ],
+    MapImage5: [
+      { x: [170, 190], y: [95, 115], site: 'CAM011' },
+      { x: [175, 195], y: [150, 170], site: 'CAM030' },
+      { x: [185, 205], y: [200, 220], site: 'CAM010' },    
+    ],
+  };
+
+  const handleCamPress = (evt) => {
+    const { locationX, locationY } = evt.nativeEvent;
+  
+    // Determine the current image based on the selectedImage state
+    let currentImageKey = null;
+    if (selectedImage === MapImage1) {
+      currentImageKey = 'MapImage1';
+    } else if (selectedImage === MapImage2) {
+      currentImageKey = 'MapImage2';
+    }
+    else if (selectedImage === MapImage3) {
+      currentImageKey = 'MapImage3';
+    }
+    else if (selectedImage === MapImage4) {
+      currentImageKey = 'MapImage4';
+    }
+    else if (selectedImage === MapImage5) {
+      currentImageKey = 'MapImage5';
+    }
+  
+    if (currentImageKey && specificTouchAreas[currentImageKey]) {
+      const touchAreas = specificTouchAreas[currentImageKey];
+  
+      for (const touchArea of touchAreas) {
+        if (
+          locationX >= touchArea.x[0] && locationX <= touchArea.x[1] &&
+          locationY >= touchArea.y[0] && locationY <= touchArea.y[1]
+        ) {
+          setSelectedSite(touchArea.site);
+          setCamModalVisible(false);
+          return;
+        }
+      }
+    }
+
+    // Common touch area (if needed)
+    const commonTouchArea = {
+      x: [280, 350],
+      y: [290, 350],
+    };
+
+    if (
+      locationX >= commonTouchArea.x[0] && locationX < commonTouchArea.x[1] &&
+      locationY >= commonTouchArea.y[0] && locationY < commonTouchArea.y[1]
+    ) {
+      // Add any common action if required
+      setCamModalVisible(false);
+      setImageModalVisible(true);
+    }
+  };
 
 
   const [index, setIndex] = useState(0);
@@ -81,7 +188,7 @@ const Home = () => {
       {observedData.map((item, idx) => (
         <Text key={idx} style={styles.bulletText}>
           • <Text style={styles.boldText}>{item.site_name} ({item.site_id}) :</Text>
-          {' '}The observed count is {item.eCount} cfu/100ml on {item.date} and this count is {' '} 
+          {' '}The observed count is {item.eCount} cfu/100ml on {item.date} and this count is {' '}
           <Text style={[styles.levelText, { color: item.level === 'MEDIUM' ? 'orange' : item.level === 'HIGH' ? 'red' : 'black' }]}>
             {item.level}
           </Text>
@@ -200,25 +307,25 @@ const Home = () => {
         </View>
       </Modal>
       <View style={styles.pickerAndDotsContainer}>
-      <View style={styles.pickerContainer}>
-        <Picker
-          mode="dropdown"
-          selectedValue={selectedSite}
-          onValueChange={(itemValue) => setSelectedSite(itemValue)}
-          style={styles.picker}
-          itemStyle={styles.pickerItem}>
-          {siteOptions.map((site, index) => (
-            <Picker.Item
-              style={{ fontSize: 12 }}
-              label={site}
-              value={site.match(/\(([^)]+)\)/)?.[1]} // Extracts value inside parentheses
-              key={index} />
-          ))}
-        </Picker>
-      </View>
-      <TouchableOpacity onPress={() => setImageModalVisible(true)} style={styles.dotsButton}>
-        <Text>⋮</Text>
-      </TouchableOpacity>
+        <View style={styles.pickerContainer}>
+          <Picker
+            mode="dropdown"
+            selectedValue={selectedSite}
+            onValueChange={(itemValue, itemIndex) => setSelectedSite(itemValue)}
+            style={styles.picker}
+            itemStyle={styles.pickerItem}>
+            {siteOptions.map((site, index) => (
+              <Picker.Item
+                label={site}
+                value={site.match(/\(([^)]+)\)/)?.[1]}
+                key={index}
+              />
+            ))}
+          </Picker>
+        </View>
+        <TouchableOpacity onPress={() => setImageModalVisible(true)} style={styles.dotsButton}>
+          <Text>⋮</Text>
+        </TouchableOpacity>
       </View>
 
 
@@ -259,36 +366,52 @@ const Home = () => {
           {selectedSite && <ContactDetailsView details={contactDetails[selectedSite]} />}
         </ScrollView>
       </View>
-            
+
       <Modal
         animationType="slide"
         transparent={true}
         visible={isImageModalVisible}
         onRequestClose={() => setImageModalVisible(false)}
       >
-        <View style={styles.modalView}>
-          <Image source={require('../assets/images/map_2.jpg')} style={styles.imageStyle_2} />
-          <TouchableOpacity onPress={() => setImageModalVisible(false)} style={styles.closeButton}>
+        <View style={styles.modalView_2}>
+          <TouchableOpacity onPress={handleMapPress} style={{ width: '100%', height: '50%', justifyContent: 'center', alignItems: 'center' }}>
+            <Image
+              source={require('../assets/images/sub_images/map_labels.jpg')}
+              resizeMode="contain"
+            />
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => setImageModalVisible(false)} style={styles.closeButton_image}>
             <Text>Close</Text>
           </TouchableOpacity>
         </View>
       </Modal>
 
+
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={isCamModalVisible}
+        onRequestClose={() => setCamModalVisible(false)}
+      >
+        <View style={styles.modalView_2}>
+          <TouchableOpacity onPress={handleCamPress} style={{ width: '100%', height: '50%', justifyContent: 'center', alignItems: 'center' }}>
+            {selectedImage && (
+              <Image
+                source={selectedImage}
+                resizeMode="contain"
+              />
+            )}
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.closeButton_image}
+            onPress={() => setCamModalVisible(false)}
+          >
+            <Text>Close</Text>
+          </TouchableOpacity>
+        </View>
+      </Modal>
     </ScrollView>
   );
 };
 
-function MyDrawer() {
-  return (
-    <Drawer.Navigator screenOptions={{ headerStyle: { height: 50 } }}>
-      <Drawer.Screen name="Home" component={Home} />
-      <Drawer.Screen name="About..." component={About} />
-      <Drawer.Screen name="Texas General Land Office" component={Tglo} />
-      {/* <Drawer.Screen name="Harte Research Institute" component={Harte} /> */}
-    </Drawer.Navigator>
-  );
-}
-
-export default function App() {
-  return <MyDrawer />;
-}
+export default Home

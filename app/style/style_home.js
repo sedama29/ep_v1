@@ -10,7 +10,7 @@ export const styles = StyleSheet.create({
   },
   pickerContainer: {
     backgroundColor: 'lightgray',
-    width: 280,
+    width: '75%',
     borderRadius: 5,
     overflow: 'hidden',
   },
@@ -30,7 +30,6 @@ export const styles = StyleSheet.create({
   },
   container_data: {
     width: '100%',
-    // height: 250,
     borderWidth: 1,
     padding: 5,
     borderRadius: 5,
@@ -50,7 +49,7 @@ export const styles = StyleSheet.create({
   container_location: {
     borderWidth:1,
     padding: 5,
-    height: 300,
+    // height: 300,
     resizeMode: 'contain',
     borderRadius: 5,
     overflow: 'hidden',
@@ -75,7 +74,7 @@ export const styles = StyleSheet.create({
     width: '100%',
     borderWidth: 1,
     padding: 5,
-    height: 200,
+    // height: 500,
     borderRadius: 5,
   },
   sectionHeader: {
@@ -158,12 +157,10 @@ export const styles = StyleSheet.create({
     fontSize:12,
     padding: 5,
   },
-  modalView: {
-    // Style for modal view
+  modalView_2: {
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
   },
   imageStyle_2: {
     // Style for the image
@@ -171,9 +168,19 @@ export const styles = StyleSheet.create({
     height: '50%',
     resizeMode: 'contain',
   },
-  closeButton: {
+  closeButton_image: {
     backgroundColor: '#ddd',
     padding: 10,
     borderRadius: 5,
+  },
+  dotTouchable: {
+    position: 'absolute',
+    width: 30,
+    height: 30,
+    left: 179 - 15,
+    top: 380 - 15,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'transparent',
   },
 });

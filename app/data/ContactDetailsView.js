@@ -15,7 +15,7 @@ const ContactDetailsView = ({ details }) => {
 
     return (
         <ScrollView>
-            <View style={styles.contactContainer}>
+            <View>
                 <Text style={styles.sectionHeader}>Entity:</Text>
                 <View style={styles.row_contact}>
                     <Text style={styles.column_contact}>Name:</Text>
