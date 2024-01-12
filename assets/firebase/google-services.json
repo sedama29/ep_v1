@@ -1,0 +1,54 @@
+{
+  "project_info": {
+    "project_number": "811824618803",
+    "project_id": "enterococcus1-578a0",
+    "storage_bucket": "enterococcus1-578a0.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:811824618803:android:7b6ed96114ce8000003246",
+        "android_client_info": {
+          "package_name": "com.enterococcus1.googlesignin"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "811824618803-f987cdcgbcd1lhlc628np2uk438s0bsl.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.enterococcus1.googlesignin",
+            "certificate_hash": "16f7ab07f1324878c437e43ee223c806a0d72fe9"
+          }
+        },
+        {
+          "client_id": "811824618803-n1ra8a7lqq6f4m916hhlvm39jtvnst4s.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAs1bIYxECySxvS6W99HBX21yNPpeg7WGo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "811824618803-n1ra8a7lqq6f4m916hhlvm39jtvnst4s.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "811824618803-d29qtatds2pecucjunoqpptjm1clukng.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.enterococcus.googlesignin"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

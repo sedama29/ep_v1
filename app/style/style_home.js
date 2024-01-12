@@ -46,6 +46,8 @@ export const styles = StyleSheet.create({
     fontSize: 11,
 
   },
+
+  
   container_location: {
     borderWidth:1,
     padding: 5,

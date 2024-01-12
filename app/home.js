@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { ScrollView, View, Text, Image, Dimensions, Modal, TouchableOpacity } from 'react-native';
+import { ScrollView, View, Text, Image, Dimensions, Modal, TouchableOpacity, FlatList } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
 import { styles } from './style/style_home';
 import Data90DaysView from './data/Data90DaysView';
 import ContactDetailsView from './data/ContactDetailsView';
 import GraphView from './GraphView';
+import { FontAwesome } from '@expo/vector-icons';
 import { TabView, SceneMap} from 'react-native-tab-view';
 import MapImage1 from '../assets/images/sub_images/JEF_1_2.jpg';
 import MapImage2 from '../assets/images/sub_images/GAL_2_2.jpg';
@@ -29,16 +30,26 @@ const Home = () => {
   const [totalCount, setTotalCount] = useState(0);
   const [isImageModalVisible, setImageModalVisible] = useState(false);
   const [isCamModalVisible, setCamModalVisible] = useState(false);
+  const [isPickerModalVisible, setPickerModalVisible] = useState(false);
 
-
+  const renderPickerItem = ({ item }) => (
+    <TouchableOpacity
+      style={styles.pickerItem}
+      onPress={() => {
+        setSelectedSite(item.match(/\(([^)]+)\)/)?.[1]);
+        setPickerModalVisible(false);
+      }}>
+      <Text style={styles.pickerText}>{item}</Text>
+    </TouchableOpacity>
+  );
   const [selectedImage, setSelectedImage] = useState(null);
 
   const touchAreas = [
-    { x: [130, 150], y: [290, 310], image: MapImage5 },
-    { x: [125, 145], y: [185, 205], image: MapImage4 },
-    { x: [240, 260], y: [95, 115], image: MapImage3 },
-    { x: [265, 285], y: [70, 90], image: MapImage2 },
-    { x: [310, 330], y: [50, 70], image: MapImage1 },
+    { x: [130, 150], y: [320, 340], image: MapImage5 },
+    { x: [125, 145], y: [205, 225], image: MapImage4 },
+    { x: [240, 260], y: [105, 125], image: MapImage3 },
+    { x: [265, 285], y: [85, 105], image: MapImage2 },
+    { x: [310, 330], y: [55, 75], image: MapImage1 },
   ];
 
   const handleMapPress = (evt) => {
@@ -61,27 +72,27 @@ const Home = () => {
   const specificTouchAreas = {
     MapImage1: [
       { x: [135, 155], y: [165, 185], site: 'JEF012' },
-      { x: [180, 200], y: [145, 165], site: 'JEF009' },
+      { x: [180, 200], y: [142, 162], site: 'JEF009' },
       { x: [205, 225], y: [140, 160], site: 'JEF013' },
     ],
     MapImage2: [
       { x: [235, 255], y: [75, 95], site: 'GAL038' },
-      { x: [170, 190], y: [130, 150], site: 'GAL037' },
-      { x: [100, 120], y: [220, 240], site: 'GAL036' },    
+      { x: [168, 188], y: [133, 153], site: 'GAL037' },
+      { x: [95, 115], y: [220, 240], site: 'GAL036' },    
     ],
     MapImage3: [
       { x: [230, 250], y: [65, 85], site: 'BRA012' },
       { x: [215, 235], y: [85, 105], site: 'BRA011' },
-      { x: [110, 130], y: [250, 270], site: 'BRA010' },    
+      { x: [108, 128], y: [255, 275], site: 'BRA010' },    
     ],
     MapImage4: [
-      { x: [190, 210], y: [110, 130], site: 'NUE014' },
+      { x: [187, 207], y: [110, 130], site: 'NUE014' },
       { x: [165, 185], y: [180, 200], site: 'NUE015' },
-      { x: [150, 170], y: [245, 255], site: 'NUE016' },    
+      { x: [150, 170], y: [242, 262], site: 'NUE016' },    
     ],
     MapImage5: [
       { x: [170, 190], y: [95, 115], site: 'CAM011' },
-      { x: [175, 195], y: [150, 170], site: 'CAM030' },
+      { x: [178, 198], y: [150, 170], site: 'CAM030' },
       { x: [185, 205], y: [200, 220], site: 'CAM010' },    
     ],
   };
@@ -123,8 +134,8 @@ const Home = () => {
 
     // Common touch area (if needed)
     const commonTouchArea = {
-      x: [280, 350],
-      y: [290, 350],
+      x: [270, 350],
+      y: [270, 350],
     };
 
     if (
@@ -237,10 +248,11 @@ const Home = () => {
         const response = await fetch('https://enterococcus.today/waf/nowcast/TX/stations.txt');
         const text = await response.text();
         const siteArray = JSON.parse(text);
-        if (Array.isArray(siteArray)) {
+        if (Array.isArray(siteArray) && siteArray.length > 0) {
           setSiteOptions(siteArray);
+          setSelectedSite(siteArray[0].match(/\(([^)]+)\)/)?.[1]); // Set the first site as default
         } else {
-          console.error('Fetched data is not an array:', siteArray);
+          console.error('Fetched data is not an array or is empty:', siteArray);
         }
       } catch (error) {
         console.error('Error fetching site data:', error);
@@ -283,7 +295,7 @@ const Home = () => {
       <TouchableOpacity onPress={showDataAlert} style={styles.alertButton}>
         <Text style={styles.alertText}>({totalCount}) Alert!</Text>
       </TouchableOpacity>
-
+      
       <Modal
         animationType="slide"
         transparent={false}
@@ -306,28 +318,44 @@ const Home = () => {
           </TouchableOpacity>
         </View>
       </Modal>
-      <View style={styles.pickerAndDotsContainer}>
-        <View style={styles.pickerContainer}>
-          <Picker
-            mode="dropdown"
-            selectedValue={selectedSite}
-            onValueChange={(itemValue, itemIndex) => setSelectedSite(itemValue)}
-            style={styles.picker}
-            itemStyle={styles.pickerItem}>
-            {siteOptions.map((site, index) => (
-              <Picker.Item
-                label={site}
-                value={site.match(/\(([^)]+)\)/)?.[1]}
-                key={index}
-              />
-            ))}
-          </Picker>
+
+
+
+    <Modal
+        visible={isPickerModalVisible}
+        onRequestClose={() => setPickerModalVisible(false)}
+        transparent={true}
+      >
+        <View style={styles.modalContainer}>
+          <View style={styles.dropdownContainer}>
+            <FlatList
+              data={siteOptions}
+              renderItem={renderPickerItem}
+              keyExtractor={(item, index) => index.toString()}
+              style={styles.dropdownList}
+            />
+          </View>
         </View>
-        <TouchableOpacity onPress={() => setImageModalVisible(true)} style={styles.dotsButton}>
-          <Text>⋮</Text>
+      </Modal>
+
+      <View style={styles.pickerAndDotsContainer}>
+      <View style={styles.pickerContainer}>
+        <TouchableOpacity
+          onPress={() => setPickerModalVisible(true)}
+          style={styles.pickerButton}
+        >
+          <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between',}}>
+            <Text style={{ color: 'blue' }}>
+              {selectedSite ? siteOptions.find(item => item.match(/\(([^)]+)\)/)?.[1] === selectedSite) : 'Select Site'}
+            </Text>
+            <FontAwesome name="caret-down" size={14} color="grey" />
+          </View>
         </TouchableOpacity>
       </View>
-
+      <TouchableOpacity onPress={() => setImageModalVisible(true)} style={styles.dotsButton}>
+        <Text>⋮</Text>
+      </TouchableOpacity>
+    </View>
 
       <Text style={{ marginTop: 30, fontSize: 14, fontWeight: 'bold' }}>Enterococcus Counts</Text>
       {selectedSite && <GraphView siteId={selectedSite} />}
